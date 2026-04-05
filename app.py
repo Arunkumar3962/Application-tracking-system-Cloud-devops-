@@ -5,7 +5,15 @@ import json
 import base64
 import google.generativeai as genai
 
-genai.configure(api_key=st.secrets.GOOGLE_API_KEY)
+import os
+
+api_key = os.getenv("GOOGLE_API_KEY")
+genai.configure(api_key=api_key)
+
+if not api_key:
+    raise ValueError("GOOGLE_API_KEY not found in environment variables")
+
+
 model = genai.GenerativeModel('gemini-2.0-flash')
 # Define cached functions
 @st.cache_data()
