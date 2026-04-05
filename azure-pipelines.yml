@@ -2,10 +2,10 @@ trigger:
 - main
 
 pool:
-  name: Devops-agent-pool
+  name: self-vm
 
 steps:
-- script: |
+- script: |self-vm
     echo "Checking Python version..."
     python3 --version
   displayName: Check Python
