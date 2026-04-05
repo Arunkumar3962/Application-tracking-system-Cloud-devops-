@@ -5,25 +5,25 @@ pool:
   name: Devops-agent-pool
 
 steps:
-- script: |self-vm
-    echo "Checking Python version..."
+- script: |
+    echo Checking Python version...
     python3 --version
   displayName: Check Python
 
 - script: |
-    echo "Installing dependencies..."
+    echo Installing dependencies...
     pip3 install --upgrade pip
     pip3 install -r requirements.txt
   displayName: Install dependencies
 
 - script: |
-    echo "Running tests..."
+    echo Running tests...
     pip3 install pytest pytest-azurepipelines
-    pytest || echo "No tests found, skipping..."
+    pytest || echo No tests found
   displayName: Run tests
 
 - task: CopyFiles@2
-  displayName: Copy files to artifact staging
+  displayName: Copy files
   inputs:
     SourceFolder: $(System.DefaultWorkingDirectory)
     Contents: '**'
