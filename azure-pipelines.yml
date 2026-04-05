@@ -2,7 +2,7 @@ trigger:
 - main
 
 pool:
-  name: self-vm
+  name: Devops-agent-pool
 
 steps:
 - script: |self-vm
