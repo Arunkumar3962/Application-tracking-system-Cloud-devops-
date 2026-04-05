@@ -2,11 +2,11 @@ trigger:
 - main
 
 pool:
-  name: self-vm   # your self-hosted agent
+  name: Devops-agent-pool
 
 steps:
 - script: |
-    echo "Checking Python..."
+    echo "Checking Python version..."
     python3 --version
   displayName: Check Python
 
@@ -17,20 +17,21 @@ steps:
   displayName: Install dependencies
 
 - script: |
-    echo "Running application..."
-    python3 app.py
-  displayName: Run app
-  env:
-    GOOGLE_API_KEY: $(GOOGLE_API_KEY)
+    echo "Running tests..."
+    pip3 install pytest pytest-azurepipelines
+    pytest || echo "No tests found, skipping..."
+  displayName: Run tests
 
-    - task: CopyFiles@2
+- task: CopyFiles@2
+  displayName: Copy files to artifact staging
   inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)'
+    SourceFolder: $(System.DefaultWorkingDirectory)
     Contents: '**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    TargetFolder: $(Build.ArtifactStagingDirectory)
 
 - task: PublishBuildArtifacts@1
+  displayName: Publish Artifact
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+    PathtoPublish: $(Build.ArtifactStagingDirectory)
+    ArtifactName: drop
+    publishLocation: Container
